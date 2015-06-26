@@ -1,0 +1,25 @@
+.sudoku-box {
+    display: block;
+    background-color: #6A8AC2;
+    margin: auto;
+    border-radius: 4px;
+}
+
+.cell {
+    fill: #6A8AC2;
+    border-radius: 2px;
+    stroke: white;
+    stroke-width: 2;
+}
+
+.cell-group-box {
+    border-radius: 2px;
+    stroke: white;
+    stroke-width: 4;
+  }
+
+text {
+    text-anchor: middle;
+}
+.container {
+}
