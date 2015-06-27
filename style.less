@@ -1,10 +1,10 @@
 @background: #847577;
 
-@background-light: lighten(@background, 5%);
+@background-light: lighten(@background, 10%);
 
 @border: #DEB190;
 
-@text: #FFFAE2;
+@text: fadeout(#FFFAE2, 5%);
 
 @font-face {
   font-family: 'Gotham';
@@ -15,11 +15,26 @@ body {
   background-color: @background;
 }
 
+a, a:link, a:visited {
+  color: @text;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  margin: 5px auto;
+}
+
+h1, h2, h3 {
+  color: @text;
+  font-family: sans-serif;
+  text-align: center;
+  margin: 5px auto;
+}
+
 div.inline {
   display: table-cell;
 }
 
-.status {
+.center {
   font-family: sans-serif;
   margin: 5px auto;
   display: table;
@@ -74,6 +89,7 @@ text {
     font-family: 'Gotham', sans-serif;
     text-anchor: middle;
     fill: @text;
+    font-size: 25px;
 }
 .container {
 }

@@ -5,36 +5,53 @@
 body {
   background-color: #847577;
 }
+a,
+a:link,
+a:visited {
+  color: rgba(255, 250, 226, 0.95);
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  margin: 5px auto;
+}
+h1,
+h2,
+h3 {
+  color: rgba(255, 250, 226, 0.95);
+  font-family: sans-serif;
+  text-align: center;
+  margin: 5px auto;
+}
 div.inline {
   display: table-cell;
 }
-.status {
+.center {
   font-family: sans-serif;
   margin: 5px auto;
   display: table;
   table-layout: fixed;
 }
 .status-text {
-  border: 1px solid #908284;
+  border: 1px solid #9c9091;
   background-color: #847577;
   border-radius: 2px;
   margin: 0 4px 0 0;
   text-align: center;
   padding: 5px;
-  color: #fffae2;
+  color: rgba(255, 250, 226, 0.95);
 }
 .status-count {
-  border: 1px solid #908284;
+  border: 1px solid #9c9091;
   background-color: #847577;
   border-radius: 2px;
   margin: 0 0 0 4px;
   text-align: center;
   padding: 5px;
-  color: #fffae2;
+  color: rgba(255, 250, 226, 0.95);
 }
 .sudoku-wrapper {
   display: block;
-  background-color: #908284;
+  background-color: #9c9091;
   margin: auto;
   border-radius: 4px;
 }
@@ -45,7 +62,7 @@ div.inline {
   stroke-width: 2;
 }
 .grid:hover {
-  fill: #908284;
+  fill: #9c9091;
 }
 .box {
   border-radius: 2px;
@@ -55,5 +72,6 @@ div.inline {
 text {
   font-family: 'Gotham', sans-serif;
   text-anchor: middle;
-  fill: #fffae2;
+  fill: rgba(255, 250, 226, 0.95);
+  font-size: 25px;
 }

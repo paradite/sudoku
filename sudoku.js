@@ -145,7 +145,7 @@ function updateData(row, col, num) {
 
 function initDOM() {
     log("initDOM");
-    d3.selectAll(".status")
+    d3.selectAll(".center")
         .style("width", width + padding + "px");
     statusTextElement = d3.select(".status-text");
     statusCountElement = d3.select(".status-count");
