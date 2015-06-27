@@ -2,22 +2,52 @@
   font-family: 'Gotham';
   src: url('font/gotham-rounded-medium.woff') format('woff');
 }
-.sudoku-box {
-  display: block;
+body {
   background-color: #847577;
+}
+div.inline {
+  display: table-cell;
+}
+.status {
+  font-family: sans-serif;
+  margin: 5px auto;
+  display: table;
+  table-layout: fixed;
+}
+.status-text {
+  border: 1px solid #908284;
+  background-color: #847577;
+  border-radius: 2px;
+  margin: 0 4px 0 0;
+  text-align: center;
+  padding: 5px;
+  color: #fffae2;
+}
+.status-count {
+  border: 1px solid #908284;
+  background-color: #847577;
+  border-radius: 2px;
+  margin: 0 0 0 4px;
+  text-align: center;
+  padding: 5px;
+  color: #fffae2;
+}
+.sudoku-wrapper {
+  display: block;
+  background-color: #908284;
   margin: auto;
   border-radius: 4px;
 }
-.cell {
+.grid {
   fill: #847577;
   border-radius: 2px;
   stroke: #deb190;
   stroke-width: 2;
 }
-.cell:hover {
-  fill: #9c9091;
+.grid:hover {
+  fill: #908284;
 }
-.cell-group-box {
+.box {
   border-radius: 2px;
   stroke: #deb190;
   stroke-width: 5;

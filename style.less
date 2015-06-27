@@ -1,6 +1,6 @@
 @background: #847577;
 
-@background-light: lighten(@background, 10%);
+@background-light: lighten(@background, 5%);
 
 @border: #DEB190;
 
@@ -11,25 +11,60 @@
   src: url('font/gotham-rounded-medium.woff') format('woff');
 }
 
-.sudoku-box {
+body {
+  background-color: @background;
+}
+
+div.inline {
+  display: table-cell;
+}
+
+.status {
+  font-family: sans-serif;
+  margin: 5px auto;
+  display: table;
+  table-layout: fixed;
+}
+
+.status-text{
+  border: 1px solid @background-light;
+  background-color: @background;
+  border-radius: 2px;
+  margin: 0 4px 0 0;
+  text-align: center;
+  padding: 5px;
+  color: @text;
+}
+
+.status-count{
+  border: 1px solid @background-light;
+  background-color: @background;
+  border-radius: 2px;
+  margin: 0 0 0 4px;
+  text-align: center;
+  padding: 5px;
+  color: @text;
+}
+
+.sudoku-wrapper {
     display: block;
-    background-color: @background;
+    background-color: @background-light;
     margin: auto;
     border-radius: 4px;
 }
 
-.cell {
+.grid {
     fill: @background;
     border-radius: 2px;
     stroke: @border;
     stroke-width: 2;
 }
 
-.cell:hover {
+.grid:hover {
   fill: @background-light;
 }
 
-.cell-group-box {
+.box {
     border-radius: 2px;
     stroke: @border;
     stroke-width: 5;
