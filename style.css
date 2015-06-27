@@ -1,25 +1,29 @@
+@font-face {
+  font-family: 'Gotham';
+  src: url('font/gotham-rounded-medium.woff') format('woff');
+}
 .sudoku-box {
-    display: block;
-    background-color: #6A8AC2;
-    margin: auto;
-    border-radius: 4px;
+  display: block;
+  background-color: #847577;
+  margin: auto;
+  border-radius: 4px;
 }
-
 .cell {
-    fill: #6A8AC2;
-    border-radius: 2px;
-    stroke: white;
-    stroke-width: 2;
+  fill: #847577;
+  border-radius: 2px;
+  stroke: #deb190;
+  stroke-width: 2;
 }
-
+.cell:hover {
+  fill: #9c9091;
+}
 .cell-group-box {
-    border-radius: 2px;
-    stroke: white;
-    stroke-width: 4;
-  }
-
-text {
-    text-anchor: middle;
+  border-radius: 2px;
+  stroke: #deb190;
+  stroke-width: 5;
 }
-.container {
+text {
+  font-family: 'Gotham', sans-serif;
+  text-anchor: middle;
+  fill: #fffae2;
 }

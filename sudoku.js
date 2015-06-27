@@ -8,7 +8,7 @@ var cell_box_dimension = cell_dimension * 3;
 
 var width = cell_dimension * cells_per_row;
 var height = cell_dimension * cells_per_column;
-var padding = 10;
+var padding = 15;
 
 var data =
     [
@@ -62,6 +62,7 @@ function init() {
         .attr("dominant-baseline", "middle")
         .attr("x", cell_dimension/2)
         .attr("y", cell_dimension/2)
+        .attr("pointer-events", "none")
         //.attr("text-anchor", "middle")
         .text(function (d) {
             if(d >= 1 && d <= 9){
