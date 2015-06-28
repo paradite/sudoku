@@ -242,7 +242,7 @@ function updateDataHints(row, col, hints) {
 
 function initDOM() {
     log("initDOM");
-    d3.selectAll(".center")
+    d3.selectAll(".fixed-width")
         .style("width", width + padding + "px");
     statusTextElement = d3.select("#status-text");
     statusCountElement = d3.select("#status-count");

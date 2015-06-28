@@ -4,6 +4,7 @@
 @active: saturate(@background, 20%);
 
 @border: #DEB190;
+@text-active: #DEB190;
 
 @text: fadeout(#FFFAE2, 5%);
 
@@ -21,12 +22,14 @@ body {
 }
 
 a, a:link, a:visited {
+  margin: 0 5px;
   cursor: pointer;
   color: @text;
-  text-align: center;
   text-decoration: none;
-  display: block;
-  margin: 5px auto;
+}
+
+a.out:hover {
+  color: @text-active;
 }
 
 h1, h2, h3 {
@@ -45,6 +48,11 @@ div.inline {
   margin: 5px auto;
   display: table;
   table-layout: fixed;
+}
+
+.inner-center {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .inline-left{
@@ -90,6 +98,8 @@ div.inline {
 }
 
 .btn {
+  text-align: center;
+  display: block;
   -moz-user-select: -moz-none;
   -khtml-user-select: none;
   -webkit-user-select: none;
