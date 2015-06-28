@@ -211,6 +211,11 @@ function updateDOM() {
     grids.select("text")
         .text(getNumber);
 
+    grids.select("rect")
+        .classed("empty" , function(d) {
+            return !d.number;
+        });
+
     updateCount();
 }
 

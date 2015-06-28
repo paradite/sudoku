@@ -61,8 +61,11 @@ div.inline {
   stroke: #deb190;
   stroke-width: 2;
 }
+.grid.empty {
+  fill: #906975;
+}
 .grid:hover {
-  fill: #9c9091;
+  fill: #9d5c65;
 }
 .box {
   border-radius: 2px;

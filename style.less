@@ -1,10 +1,14 @@
 @background: #847577;
 
 @background-light: lighten(@background, 10%);
+@active: saturate(@background, 20%);
 
 @border: #DEB190;
 
 @text: fadeout(#FFFAE2, 5%);
+
+@empty: saturate(spin(@background, -10), 10%);
+//@empty: saturate(@background, 10%);
 
 @font-face {
   font-family: 'Gotham';
@@ -75,8 +79,12 @@ div.inline {
     stroke-width: 2;
 }
 
+.grid.empty {
+  fill: @empty;
+}
+
 .grid:hover {
-  fill: @background-light;
+  fill: @active;
 }
 
 .box {
