@@ -3,11 +3,13 @@
   src: url('font/gotham-rounded-medium.woff') format('woff');
 }
 body {
+  margin: 0;
   background-color: #847577;
 }
 a,
 a:link,
 a:visited {
+  cursor: pointer;
   color: rgba(255, 250, 226, 0.95);
   text-align: center;
   text-decoration: none;
@@ -31,7 +33,7 @@ div.inline {
   display: table;
   table-layout: fixed;
 }
-.status-text {
+.inline-left {
   border: 1px solid #9c9091;
   background-color: #847577;
   border-radius: 2px;
@@ -40,7 +42,7 @@ div.inline {
   padding: 5px;
   color: rgba(255, 250, 226, 0.95);
 }
-.status-count {
+.inline-right {
   border: 1px solid #9c9091;
   background-color: #847577;
   border-radius: 2px;
@@ -67,6 +69,20 @@ div.inline {
 .grid:hover {
   fill: #9d5c65;
 }
+.btn {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  /*
+    Introduced in IE 10.
+    See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+  */
+  -ms-user-select: none;
+  user-select: none;
+}
+.btn:hover {
+  background-color: #9d5c65;
+}
 .box {
   border-radius: 2px;
   stroke: #deb190;
@@ -74,7 +90,13 @@ div.inline {
 }
 text {
   font-family: 'Gotham', sans-serif;
-  text-anchor: middle;
   fill: rgba(255, 250, 226, 0.95);
+}
+text.number {
   font-size: 25px;
+  text-anchor: middle;
+}
+text.hint {
+  font-size: 12px;
+  text-anchor: start;
 }

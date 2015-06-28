@@ -16,10 +16,12 @@
 }
 
 body {
+  margin: 0;
   background-color: @background;
 }
 
 a, a:link, a:visited {
+  cursor: pointer;
   color: @text;
   text-align: center;
   text-decoration: none;
@@ -45,7 +47,7 @@ div.inline {
   table-layout: fixed;
 }
 
-.status-text{
+.inline-left{
   border: 1px solid @background-light;
   background-color: @background;
   border-radius: 2px;
@@ -55,7 +57,7 @@ div.inline {
   color: @text;
 }
 
-.status-count{
+.inline-right{
   border: 1px solid @background-light;
   background-color: @background;
   border-radius: 2px;
@@ -66,17 +68,17 @@ div.inline {
 }
 
 .sudoku-wrapper {
-    display: block;
-    background-color: @background-light;
-    margin: auto;
-    border-radius: 4px;
+  display: block;
+  background-color: @background-light;
+  margin: auto;
+  border-radius: 4px;
 }
 
 .grid {
-    fill: @background;
-    border-radius: 2px;
-    stroke: @border;
-    stroke-width: 2;
+  fill: @background;
+  border-radius: 2px;
+  stroke: @border;
+  stroke-width: 2;
 }
 
 .grid.empty {
@@ -87,17 +89,43 @@ div.inline {
   fill: @active;
 }
 
+.btn {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+
+  /*
+    Introduced in IE 10.
+    See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+  */
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.btn:hover {
+  background-color: @active;
+}
+
 .box {
-    border-radius: 2px;
-    stroke: @border;
-    stroke-width: 5;
-  }
+  border-radius: 2px;
+  stroke: @border;
+  stroke-width: 5;
+}
 
 text {
-    font-family: 'Gotham', sans-serif;
-    text-anchor: middle;
-    fill: @text;
-    font-size: 25px;
+  font-family: 'Gotham', sans-serif;
+  fill: @text;
 }
+
+text.number {
+  font-size: 25px;
+  text-anchor: middle;
+}
+
+text.hint {
+  font-size: 12px;
+  text-anchor: start;
+}
+
 .container {
 }
