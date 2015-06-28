@@ -354,7 +354,7 @@ function autoSolveAll() {
     var solved = autoSolve();
     if(solved != 0) {
         // new state obtained, auto solve again
-        setTimeout(autoSolveAll, 500);
+        setTimeout(autoSolveAll, 300);
     }
 }
 
