@@ -246,9 +246,9 @@ function initDOM() {
         .style("width", width + padding + "px");
     statusTextElement = d3.select("#status-text");
     statusCountElement = d3.select("#status-count");
-    autoSolveBtn = d3.select("#auto-solve")
+    d3.select("#auto-solve")
         .on("click", autoSolve);
-    autoSolveAllBtn = d3.select("#auto-solve-all")
+    d3.select("#auto-solve-all")
         .on("click", autoSolveAll);
     var container = d3.select(".container");
 

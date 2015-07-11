@@ -6,6 +6,10 @@ body {
   margin: 0;
   background-color: #847577;
 }
+.readable {
+  font-size: 18px;
+  padding: 8px;
+}
 a,
 a:link,
 a:visited {
@@ -44,7 +48,6 @@ div.inline {
   border-radius: 2px;
   margin: 0 4px 0 0;
   text-align: center;
-  padding: 5px;
   color: rgba(255, 250, 226, 0.95);
 }
 .inline-right {
@@ -53,7 +56,6 @@ div.inline {
   border-radius: 2px;
   margin: 0 0 0 4px;
   text-align: center;
-  padding: 5px;
   color: rgba(255, 250, 226, 0.95);
 }
 .sudoku-wrapper {
