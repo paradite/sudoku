@@ -7,8 +7,15 @@ body {
   background-color: #847577;
 }
 .readable {
+  vertical-align: middle;
+  height: 48px;
   font-size: 18px;
-  padding: 8px;
+  border: 1px solid #9c9091;
+  border-radius: 4px;
+}
+.clickable:hover {
+  cursor: pointer;
+  background-color: #9d5c65;
 }
 a,
 a:link,
@@ -21,11 +28,6 @@ a:visited {
 a.out:hover {
   color: #deb190;
 }
-
-h1 {
-  font-size: 32px;
-}
-
 h1,
 h2,
 h3 {
@@ -48,17 +50,11 @@ div.inline {
   vertical-align: middle;
 }
 .inline-left {
-  border: 1px solid #9c9091;
-  background-color: #847577;
-  border-radius: 2px;
   margin: 0 4px 0 0;
   text-align: center;
   color: rgba(255, 250, 226, 0.95);
 }
 .inline-right {
-  border: 1px solid #9c9091;
-  background-color: #847577;
-  border-radius: 2px;
   margin: 0 0 0 4px;
   text-align: center;
   color: rgba(255, 250, 226, 0.95);
@@ -93,9 +89,6 @@ div.inline {
   */
   -ms-user-select: none;
   user-select: none;
-}
-.btn:hover {
-  background-color: #9d5c65;
 }
 .box {
   border-radius: 2px;

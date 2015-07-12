@@ -22,8 +22,16 @@ body {
 }
 
 .readable {
+  vertical-align: middle;
+  height: 48px;
   font-size: 18px;
-  padding: 8px;
+  border: 1px solid @background-light;
+  border-radius: 4px;
+}
+
+.clickable:hover {
+  cursor: pointer;
+  background-color: @active;
 }
 
 a, a:link, a:visited {
@@ -61,18 +69,12 @@ div.inline {
 }
 
 .inline-left{
-  border: 1px solid @background-light;
-  background-color: @background;
-  border-radius: 2px;
   margin: 0 4px 0 0;
   text-align: center;
   color: @text;
 }
 
 .inline-right{
-  border: 1px solid @background-light;
-  background-color: @background;
-  border-radius: 2px;
   margin: 0 0 0 4px;
   text-align: center;
   color: @text;
@@ -115,9 +117,9 @@ div.inline {
   user-select: none;
 }
 
-.btn:hover {
-  background-color: @active;
-}
+// .btn:hover {
+//   background-color: @active;
+// }
 
 .box {
   border-radius: 2px;
