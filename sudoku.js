@@ -6,11 +6,17 @@ var TITLE_HEIGHT = 65;
 var FOOTER_HEIGHT = 15;
 var BUTTON_ROWS = 2;
 
-var sizeLimit = getHeight() < getWidth()?getHeight():getWidth();
+var LANSCAPE = getHeight() < getWidth()?true:false;
+
+var sizeLimit = LANSCAPE?getHeight():getWidth();
 
 var BOARD_PADDING = 12;
 
-var boardSize = sizeLimit - BUTTON_HEIGHT * BUTTON_ROWS - TITLE_HEIGHT - FOOTER_HEIGHT - BOARD_PADDING * 2;
+var boardSize = sizeLimit - BOARD_PADDING * 2 - TITLE_HEIGHT;
+
+if(LANSCAPE) {
+    boardSize = sizeLimit - BUTTON_HEIGHT * BUTTON_ROWS - TITLE_HEIGHT - FOOTER_HEIGHT - BOARD_PADDING * 2;
+}
 
 var boardWidth = boardSize;
 var boardHeight = boardSize;
