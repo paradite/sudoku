@@ -4,6 +4,7 @@
 @active: saturate(@background, 20%);
 
 @border: #DEB190;
+@border-box: lighten(@border, 8%);
 @text-active: #DEB190;
 
 @text: fadeout(#FFFAE2, 5%);
@@ -133,8 +134,8 @@ div.inline {
 
 .box {
   border-radius: 2px;
-  stroke: @border;
-  stroke-width: 5;
+  stroke: @border-box;
+  stroke-width: 3;
 }
 
 text {
