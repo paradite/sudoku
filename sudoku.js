@@ -307,7 +307,7 @@ function initDOM() {
 
     gridsEnter.append("text")
         .classed("number", true)
-        .attr("dominant-baseline", "middle")
+        .attr("dominant-baseline", "central")
         .attr("x", gridSize/2)
         .attr("y", gridSize/2)
         .attr("pointer-events", "none");
