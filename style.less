@@ -27,6 +27,16 @@ body {
   font-size: 16px;
   border: 1px solid @background-light;
   border-radius: 4px;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+
+  /*
+    Introduced in IE 10.
+    See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+  */
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .clickable:hover {
