@@ -1,15 +1,29 @@
 /**
  * Created by paradite on 23/2/15.
  */
-var GRID_SIZE = 58;
+var BUTTON_HEIGHT = 52;
+var TITLE_HEIGHT = 62;
+var FOOTER_HEIGHT = 15;
+var BUTTON_ROWS = 2;
+
+var sizeLimit = getHeight() < getWidth()?getHeight():getWidth();
+
+var BOARD_PADDING = 12;
+
+var boardSize = sizeLimit - BUTTON_HEIGHT * BUTTON_ROWS - TITLE_HEIGHT - FOOTER_HEIGHT - BOARD_PADDING;
+
+var boardWidth = boardSize;
+var boardHeight = boardSize;
+
 var GRIDS_PER_BOX = 3;
 var BOXS_PER_DIMEN = 3;
 var GRIDS_PER_DIMEN = GRIDS_PER_BOX * BOXS_PER_DIMEN;
-var BOX_SIZE = GRID_SIZE * GRIDS_PER_BOX;
 
-var width = GRID_SIZE * GRIDS_PER_DIMEN;
-var height = GRID_SIZE * GRIDS_PER_DIMEN;
-var padding = 12;
+
+var gridSize = boardWidth / GRIDS_PER_DIMEN;
+var boxSize = gridSize * GRIDS_PER_BOX;
+
+
 
 var locked = false;
 
@@ -243,7 +257,7 @@ function updateDataHints(row, col, hints) {
 function initDOM() {
     log("initDOM");
     d3.selectAll(".fixed-width")
-        .style("width", width + padding + "px");
+        .style("width", boardWidth + BOARD_PADDING + "px");
     statusTextElement = d3.select("#status-text");
     statusCountElement = d3.select("#status-count");
     d3.select("#auto-solve")
@@ -253,11 +267,11 @@ function initDOM() {
     var container = d3.select(".container");
 
     var wrapper = container.append("svg")
-        .attr("width", width + padding)
-        .attr("height", height + padding)
+        .attr("width", boardWidth + BOARD_PADDING)
+        .attr("height", boardHeight + BOARD_PADDING)
         .classed("sudoku-wrapper", true)
         .append("g")
-        .attr("transform", "translate("+ padding/2 + "," + padding/2 + ")");
+        .attr("transform", "translate("+ BOARD_PADDING/2 + "," + BOARD_PADDING/2 + ")");
 
 
     var rows = wrapper.selectAll("g")
@@ -265,7 +279,7 @@ function initDOM() {
         .enter()
         .append("g")
         .classed("row" , true)
-        .attr("transform", function(d, i){return "translate("+ 0 + "," + (i * GRID_SIZE) + ")";});
+        .attr("transform", function(d, i){return "translate("+ 0 + "," + (i * gridSize) + ")";});
 
     grids = rows.selectAll("g")
         .data(function(d, i){
@@ -275,37 +289,37 @@ function initDOM() {
 
     var gridsEnter = grids.enter()
         .append("g")
-        .attr("height", GRID_SIZE)
-        .attr("width", GRID_SIZE)
-        .attr("transform", function(d, i){return "translate("+ (i * GRID_SIZE) + "," + 0 + ")";});
+        .attr("height", gridSize)
+        .attr("width", gridSize)
+        .attr("transform", function(d, i){return "translate("+ (i * gridSize) + "," + 0 + ")";});
 
     gridsEnter.append("rect")
         .classed("grid" , true)
-        .attr("height", GRID_SIZE)
-        .attr("width", GRID_SIZE)
+        .attr("height", gridSize)
+        .attr("width", gridSize)
         .on("click", gridClickHandler);
 
     gridsEnter.append("text")
         .classed("number", true)
         .attr("dominant-baseline", "middle")
-        .attr("x", GRID_SIZE/2)
-        .attr("y", GRID_SIZE/2)
+        .attr("x", gridSize/2)
+        .attr("y", gridSize/2)
         .attr("pointer-events", "none");
 
     gridsEnter.append("text")
         .classed("hint", true)
         .attr("dominant-baseline", "hanging")
-        .attr("x", GRID_SIZE/6)
-        .attr("y", GRID_SIZE/6)
+        .attr("x", gridSize/6)
+        .attr("y", gridSize/6)
         .attr("pointer-events", "none");
 
     // overlay 9-grid-box borders
-    for(i = 0; i < GRIDS_PER_DIMEN / 3; i++) {
-        for(j = 0; j < GRIDS_PER_DIMEN / 3; j++) {
+    for(var i = 0; i < GRIDS_PER_DIMEN / 3; i++) {
+        for(var j = 0; j < GRIDS_PER_DIMEN / 3; j++) {
             wrapper.append("rect")
-                .attr("height", BOX_SIZE)
-                .attr("width", BOX_SIZE)
-                .attr("transform", "translate("+ (i * BOX_SIZE) + "," + (j * BOX_SIZE) + ")")
+                .attr("height", boxSize)
+                .attr("width", boxSize)
+                .attr("transform", "translate("+ (i * boxSize) + "," + (j * boxSize) + ")")
                 .attr("fill-opacity", "0")
                 .attr("pointer-events", "none")
                 .classed("box", true);
@@ -365,3 +379,31 @@ function log(text) {
 formatData();
 initDOM();
 generateHints();
+
+function getWidth() {
+  if (window.self.innerHeight) {
+    return window.self.innerWidth;
+  }
+
+  if (document.documentElement && document.documentElement.clientHeight) {
+    return document.documentElement.clientWidth;
+  }
+
+  if (document.body) {
+    return document.body.clientWidth;
+  }
+}
+
+function getHeight() {
+  if (window.self.innerHeight) {
+    return window.self.innerHeight;
+  }
+
+  if (document.documentElement && document.documentElement.clientHeight) {
+    return document.documentElement.clientHeight;
+  }
+
+  if (document.body) {
+    return document.body.clientHeight;
+  }
+}
