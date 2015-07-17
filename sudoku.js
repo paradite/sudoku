@@ -140,7 +140,6 @@ function generateHints() {
 function generateHint(d) {
     if(d.number == 0) {
         var possibleNumbers = getPossibleNumbers(d.row, d.column);
-        log(d.row + " " + d.column + " " + possibleNumbers);
         if(possibleNumbers.length == 0) {
             // this should not happen
             errorSolving();
@@ -156,7 +155,6 @@ function generateHint(d) {
 function solveGrid(d) {
     if(d.number == 0) {
         var possibleNumbers = d.hint;
-        log(d);
         if (possibleNumbers.length == 0) {
             // this should not happen
             errorSolving();
@@ -179,7 +177,6 @@ function gridClickHandler(d) {
     if(locked) {
         return;
     }
-    log("row: " + d.row + " column:" + d.column + " number: " + d.number);
     if(isSetupMode) {
         // highlight this grid using empty effect
         grids.select("rect")
@@ -199,7 +196,6 @@ function setupGrid(d) {
         .selectAll("div")
         .classed("clickable", true)
         .on("click", function(){
-            console.log(this.id);
             d3.select("#pad")
                 .selectAll("div")
                 .classed("clickable", false);
@@ -278,7 +274,6 @@ function updateDataHints(row, col, hints) {
 }
 
 function initDOM() {
-    log("initDOM");
     d3.selectAll(".fixed-width")
         .style("width", boardWidth + BOARD_PADDING + "px");
     statusTextElement = d3.select("#status-text");
@@ -369,7 +364,6 @@ function initDOM() {
 }
 
 function updateDOM(showHint) {
-    log("updateDOM");
 
     grids.select(".number")
         .text(getNumber);
