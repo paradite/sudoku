@@ -1,6 +1,8 @@
 /**
  * Created by paradite on 23/2/15.
  */
+var CLEAR_TEXT = "clear"
+ 
 var BUTTON_HEIGHT = 55;
 var TITLE_HEIGHT = 65;
 var FOOTER_HEIGHT = 15;
@@ -192,6 +194,7 @@ function gridClickHandler(d) {
 }
 
 function setupGrid(d) {
+    updateStatus("Please select a number from below");
     d3.select("#pad")
         .selectAll("div")
         .classed("clickable", true)
@@ -200,7 +203,12 @@ function setupGrid(d) {
             d3.select("#pad")
                 .selectAll("div")
                 .classed("clickable", false);
-            updateDataNumber(d.row, d.column, +this.id);
+            if(this.id === CLEAR_TEXT) {
+                updateDataNumber(d.row, d.column, 0);
+            } else {
+                updateDataNumber(d.row, d.column, +this.id);
+            }
+            
             updateDOM(false);
         });
 }
@@ -289,7 +297,7 @@ function initDOM() {
     d3.select("#pad")
         .style("display", "none")
         .selectAll("div")
-        .data([1,2,3,4,5,6,7,8,9])
+        .data([1,2,3,4,5,6,7,8,9,CLEAR_TEXT])
         .enter()
         .append("div")
         .attr("id", function(d) {return d;})
@@ -396,6 +404,8 @@ function autoSolve() {
     var solved = count - newCount;
     if(newCount === 0) {
         updateStatus("All grids solved");
+    } if(solved === 0) {
+        updateStatus("Cannot solve any grids, need to improve algorithm");
     } else {
         updateStatus(solved + " grids solved");
     }
@@ -425,7 +435,7 @@ function enterSetUpMode() {
     isSetupMode = true;
     clearBoard();
     toggleNumberPad(true);
-    updateStatus("Please enter the initial clues");
+    updateStatus("Please select a grid to enter the initial clue");
     setUpElement.text("Finish setting up");
 }
 
