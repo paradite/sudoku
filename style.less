@@ -1,7 +1,6 @@
 @background: #847577;
 
 @background-light: lighten(@background, 10%);
-@active: saturate(@background, 20%);
 
 @border: #DEB190;
 @border-box: lighten(@border, 8%);
@@ -11,6 +10,11 @@
 
 @empty: saturate(spin(@background, -10), 10%);
 //@empty: saturate(@background, 10%);
+
+// @btn: saturate(@background, 10%);
+@btn: @empty;
+@hovered: saturate(@background, 25%);
+
 
 @font-face {
   font-family: 'Gotham';
@@ -27,7 +31,6 @@ body {
   height: 48px;
   font-size: 16px;
   border: 1px solid @background-light;
-  border-radius: 4px;
   -moz-user-select: -moz-none;
   -khtml-user-select: none;
   -webkit-user-select: none;
@@ -40,9 +43,18 @@ body {
   user-select: none;
 }
 
+.non-clickable {
+  border-radius: 0px;
+}
+
+.clickable {
+  background-color: @btn;
+  border-radius: 8px;
+}
+
 .clickable:hover {
   cursor: pointer;
-  background-color: @active;
+  background-color: @hovered;
 }
 
 a, a:link, a:visited {
@@ -79,14 +91,7 @@ div.inline {
   vertical-align: middle;
 }
 
-.inline-left{
-  margin: 0 4px 0 0;
-  text-align: center;
-  color: @text;
-}
-
-.inline-right{
-  margin: 0 0 0 4px;
+.inline-element{
   text-align: center;
   color: @text;
 }
@@ -110,7 +115,7 @@ div.inline {
 }
 
 .grid:hover {
-  fill: @active;
+  fill: @hovered;
 }
 
 .btn {

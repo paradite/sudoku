@@ -266,10 +266,16 @@ function initDOM() {
         .style("width", boardWidth + BOARD_PADDING + "px");
     statusTextElement = d3.select("#status-text");
     statusCountElement = d3.select("#status-count");
+    
+    // button handlers
     d3.select("#auto-solve")
         .on("click", autoSolve);
     d3.select("#auto-solve-all")
         .on("click", autoSolveAll);
+    d3.select("#new-puzzle")
+        .on("click", newPuzzle);
+        
+        
     var container = d3.select(".container");
 
     var wrapper = container.append("svg")
@@ -351,22 +357,20 @@ function updateDOM() {
     updateCount();
 }
 
-function eachData(f) {
-    for (var i = 0; i < data.length; i++) {
-        for (var j = 0; j < data[i].length; j++) {
-            var d = data[i][j];
-            f(d);
-        }
-    }
-}
-
 function autoSolve() {
     var count = updateCount();
+    if(count === 0) {
+        return 0;
+    }
     eachData(solveGrid);
     generateHints();
     var newCount = updateCount();
     var solved = count - newCount;
-    updateStatus(solved + " grids solved");
+    if(newCount === 0) {
+        updateStatus("All grids solved");
+    } else {
+        updateStatus(solved + " grids solved");
+    }
     return solved;
 }
 
@@ -378,13 +382,18 @@ function autoSolveAll() {
     }
 }
 
-function log(text) {
-    console.log(text);
+function newPuzzle() {
+    enterSetUpMode();
+    updateStatus("Please enter the initial clues");
 }
 
-formatData();
-initDOM();
-generateHints();
+function enterSetUpMode() {
+    
+}
+
+function exitSetUpMode() {
+    
+}
 
 function getWidth() {
   if (window.self.innerHeight) {
@@ -413,3 +422,21 @@ function getHeight() {
     return document.body.clientHeight;
   }
 }
+
+function eachData(f) {
+    for (var i = 0; i < data.length; i++) {
+        for (var j = 0; j < data[i].length; j++) {
+            var d = data[i][j];
+            f(d);
+        }
+    }
+}
+
+function log(text) {
+    console.log(text);
+}
+
+formatData();
+initDOM();
+generateHints();
+

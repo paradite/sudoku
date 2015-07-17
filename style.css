@@ -11,7 +11,6 @@ body {
   height: 48px;
   font-size: 16px;
   border: 1px solid #9c9091;
-  border-radius: 4px;
   -moz-user-select: -moz-none;
   -khtml-user-select: none;
   -webkit-user-select: none;
@@ -22,9 +21,16 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
+.non-clickable {
+  border-radius: 0px;
+}
+.clickable {
+  background-color: #906975;
+  border-radius: 8px;
+}
 .clickable:hover {
   cursor: pointer;
-  background-color: #9d5c65;
+  background-color: #a35660;
 }
 a,
 a:link,
@@ -58,13 +64,7 @@ div.inline {
   display: inline-block;
   vertical-align: middle;
 }
-.inline-left {
-  margin: 0 4px 0 0;
-  text-align: center;
-  color: rgba(255, 250, 226, 0.95);
-}
-.inline-right {
-  margin: 0 0 0 4px;
+.inline-element {
   text-align: center;
   color: rgba(255, 250, 226, 0.95);
 }
@@ -84,7 +84,7 @@ div.inline {
   fill: #906975;
 }
 .grid:hover {
-  fill: #9d5c65;
+  fill: #a35660;
 }
 .btn {
   text-align: center;
