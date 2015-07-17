@@ -33,6 +33,8 @@ var boxSize = gridSize * GRIDS_PER_BOX;
 
 var locked = false;
 
+var isSetupMode = false;
+
 var dataString =
     [
         "630001800",
@@ -45,48 +47,32 @@ var dataString =
         "010007900",
         "008900073"
     ];
+    
+var dataStringEmpty =
+    [
+        "000000000",
+        "000000000",
+        "000000000",
+        "000000000",
+        "000000000",
+        "000000000",
+        "000000000",
+        "000000000",
+        "000000000"
+    ];
 
 var data = [GRIDS_PER_DIMEN];
-
-var data0 =
-    [
-        [0,9,1,2,0,0,5,7,4],
-        [4,0,7,3,5,9,1,2,6],
-        [6,5,0,7,1,4,8,3,9],
-        //
-        [0,7,5,4,3,1,6,9,2],
-        [2,1,3,9,6,7,4,8,5],
-        [9,6,4,0,2,8,7,0,3],
-        //
-        [1,4,9,6,7,3,2,5,8],
-        [0,3,8,1,0,2,9,6,7],
-        [7,2,6,8,9,5,3,4,1]
-    ];
-
-var data0_complete =
-    [
-        [3,9,1,2,8,6,5,7,4],
-        [4,8,7,3,5,9,1,2,6],
-        [6,5,2,7,1,4,8,3,9],
-        //
-        [8,7,5,4,3,1,6,9,2],
-        [2,1,3,9,6,7,4,8,5],
-        [9,6,4,5,2,8,7,1,3],
-        //
-        [1,4,9,6,7,3,2,5,8],
-        [5,3,8,1,4,2,9,6,7],
-        [7,2,6,8,9,5,3,4,1]
-    ];
 
 var grids;
 var statusTextElement;
 var statusCountElement;
+var setUpElement;
 
-function formatData() {
+function formatData(source) {
     // add row and column info into each grid for user interaction
-    for (var i = 0; i < dataString.length; i++) {
+    for (var i = 0; i < source.length; i++) {
         data[i] = [GRIDS_PER_DIMEN];
-        var row = dataString[i];
+        var row = source[i];
         var digitStrings = row.split("");
         for (var j = 0; j < row.length; j++) {
             var digit = parseInt(digitStrings[j]);
@@ -146,7 +132,7 @@ function generateHints() {
             generateHint(d);
         }
     }
-    updateDOM();
+    updateDOM(true);
 }
 
 function generateHint(d) {
@@ -175,7 +161,7 @@ function solveGrid(d) {
         } else if (possibleNumbers.length == 1) {
             updateStatus("The only possible number is " + possibleNumbers[0]);
             updateDataNumber(d.row, d.column, possibleNumbers[0]);
-            updateDOM();
+            updateDOM(true);
         } else {
             var numbers = possibleNumbers[0];
             for (var i = 1; i < possibleNumbers.length; i++) {
@@ -192,8 +178,31 @@ function gridClickHandler(d) {
         return;
     }
     log("row: " + d.row + " column:" + d.column + " number: " + d.number);
-    solveGrid(d);
-    generateHints();
+    if(isSetupMode) {
+        // highlight this grid using empty effect
+        grids.select("rect")
+            .classed("empty", false);
+        d3.select(this)
+            .classed("empty", true);
+        setupGrid(d);
+    } else {
+        solveGrid(d);
+        generateHints();
+    }
+}
+
+function setupGrid(d) {
+    d3.select("#pad")
+        .selectAll("div")
+        .classed("clickable", true)
+        .on("click", function(){
+            console.log(this.id);
+            d3.select("#pad")
+                .selectAll("div")
+                .classed("clickable", false);
+            updateDataNumber(d.row, d.column, +this.id);
+            updateDOM(false);
+        });
 }
 
 function removeNumber(numbers, n) {
@@ -266,16 +275,27 @@ function initDOM() {
         .style("width", boardWidth + BOARD_PADDING + "px");
     statusTextElement = d3.select("#status-text");
     statusCountElement = d3.select("#status-count");
+    setUpElement = d3.select("#new-puzzle");
     
     // button handlers
     d3.select("#auto-solve")
         .on("click", autoSolve);
     d3.select("#auto-solve-all")
         .on("click", autoSolveAll);
-    d3.select("#new-puzzle")
-        .on("click", newPuzzle);
+    setUpElement.on("click", newPuzzle);
         
-        
+    // number pad
+    
+    d3.select("#pad")
+        .style("display", "none")
+        .selectAll("div")
+        .data([1,2,3,4,5,6,7,8,9])
+        .enter()
+        .append("div")
+        .attr("id", function(d) {return d;})
+        .text(function(d) {return d;})
+        .classed("inline readable btn", true);
+    
     var container = d3.select(".container");
 
     var wrapper = container.append("svg")
@@ -337,20 +357,28 @@ function initDOM() {
                 .classed("box", true);
         }
     }
-    updateDOM();
+    updateDOM(true);
 }
 
-function updateDOM() {
+function updateDOM(showHint) {
     log("updateDOM");
 
     grids.select(".number")
         .text(getNumber);
 
-    grids.select(".hint")
-        .text(getHint);
+    if(showHint) {
+        grids.select(".hint")
+            .text(getHint);
+    } else {
+        grids.select(".hint")
+            .text("");
+    }
 
     grids.select("rect")
         .classed("empty" , function(d) {
+            if(isSetupMode) {
+                return false;
+            }
             return !d.number;
         });
 
@@ -383,16 +411,73 @@ function autoSolveAll() {
 }
 
 function newPuzzle() {
-    enterSetUpMode();
-    updateStatus("Please enter the initial clues");
+    if(isSetupMode) {
+        exitSetUpMode();
+    } else {
+        enterSetUpMode();
+    }
+    
+    
 }
 
 function enterSetUpMode() {
-    
+    locked = false;
+    isSetupMode = true;
+    clearBoard();
+    toggleNumberPad(true);
+    updateStatus("Please enter the initial clues");
+    setUpElement.text("Finish setting up");
 }
 
 function exitSetUpMode() {
+    if(isPuzzleValid()) {
+        isSetupMode = false;
+        toggleNumberPad(false);
+        generateHints();
+        updateDOM(true);
+        updateStatus("Select an empty grid");
+        setUpElement.text("Setup New Puzzle");
+    } else {
+        updateStatus("The puzzle is invalid");
+    }
+}
+
+function clearBoard() {
+    eachData(clearGrid);
+    generateHints();
+    updateDOM(false);
+}
+
+function clearGrid(d) {
+    updateDataNumber(d.row, d.column, 0);
+}
+
+function toggleNumberPad(display) {
+    if(display) {
+        d3.select("#pad")
+            .style("display", "table");
+            
+        // hide unnecessary buttons
+        d3.select("#solve")
+            .style("display", "none");
+    } else {
+        d3.select("#pad")
+            .style("display", "none");
+        
+        // change state of number pad to inactive
+        d3.select("#pad")
+                .selectAll("div")
+                .classed("clickable", false);
+        
+        // show buttons
+        d3.select("#solve")
+            .style("display", "table");
+    }
+}
+
+function isPuzzleValid() {
     
+    return true;
 }
 
 function getWidth() {
@@ -436,7 +521,7 @@ function log(text) {
     console.log(text);
 }
 
-formatData();
+formatData(dataString);
 initDOM();
 generateHints();
 

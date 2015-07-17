@@ -52,6 +52,8 @@ h3 {
   margin: 5px auto;
 }
 div.inline {
+  text-align: center;
+  color: rgba(255, 250, 226, 0.95);
   display: table-cell;
 }
 .center {
@@ -63,10 +65,6 @@ div.inline {
 .inner-center {
   display: inline-block;
   vertical-align: middle;
-}
-.inline-element {
-  text-align: center;
-  color: rgba(255, 250, 226, 0.95);
 }
 .sudoku-wrapper {
   display: block;
