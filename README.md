@@ -1,5 +1,5 @@
-# Sudoku assistant
-## Sudoku step by step solver
+# Sudoku Solver
+## Sudoku step-by-step solver
 
 [http://paradite.github.io/sudoku/](http://paradite.github.io/sudoku/)
 
