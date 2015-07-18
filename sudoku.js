@@ -78,7 +78,20 @@ var dataStringMedium =
         "402050000",
         "860000900"
     ];
-    
+
+var dataStringHard =
+    [
+        "600300090",
+        "002000803",
+        "000000746",
+        "100640050",
+        "000801000",
+        "080025001",
+        "941000000",
+        "208000600",
+        "050007004"
+    ];
+
 var dataStringEmpty =
     [
         "000000000",
@@ -646,7 +659,7 @@ function isPuzzleValid() {
     return true;
 }
 
-formatData(dataStringMedium);
+formatData(dataStringHard);
 initDOM();
 generateHints();
 
