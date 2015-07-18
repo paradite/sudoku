@@ -40,7 +40,7 @@ var locked = false;
 
 var isSetupMode = false;
 
-var dataString =
+var dataStringBasic =
     [
         "630001800",
         "004200090",
@@ -53,7 +53,7 @@ var dataString =
         "008900073"
     ];
     
-var dataStringHard =
+var dataStringEasy =
     [
         "009000070",
         "270080003",
@@ -64,6 +64,19 @@ var dataStringHard =
         "700802001",
         "100040039",
         "020000700"
+    ];
+    
+var dataStringMedium =
+    [
+        "009000073",
+        "000010205",
+        "038500600",
+        "000035000",
+        "006129300",
+        "000740000",
+        "005004130",
+        "402050000",
+        "860000900"
     ];
     
 var dataStringEmpty =
@@ -633,7 +646,7 @@ function isPuzzleValid() {
     return true;
 }
 
-formatData(dataStringHard);
+formatData(dataStringMedium);
 initDOM();
 generateHints();
 
