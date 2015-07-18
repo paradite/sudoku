@@ -41,3 +41,8 @@ function eachData(data, f) {
 function log(text) {
     console.log(text);
 }
+
+function contains(array, element)
+{
+    return array.indexOf(element) >= 0;
+}

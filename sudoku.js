@@ -53,6 +53,19 @@ var dataString =
         "008900073"
     ];
     
+var dataStringHard =
+    [
+        "009000070",
+        "270080003",
+        "600307008",
+        "093400500",
+        "412603897",
+        "007008310",
+        "700802001",
+        "100040039",
+        "020000700"
+    ];
+    
 var dataStringEmpty =
     [
         "000000000",
@@ -148,7 +161,6 @@ function generateHints() {
 function generateHint(d) {
     if(d.number == 0) {
         var possibleNumbers = getPossibleNumbers(d.row, d.column);
-        log("possible numbers: " + possibleNumbers);
         updateDataHints(d.row, d.column, possibleNumbers);
         if(possibleNumbers.length == 0) {
             // this should not happen
@@ -161,27 +173,46 @@ function generateHint(d) {
 }
 
 function solveGrid(d) {
+    // Solve by rules
+    // http://www.paulspages.co.uk/sudoku/howtosolve/
+    
+    if(d.number != 0) {
+        // already solved, ignore
+        return false;
+    }
     highlightGrid(d, true);
-    if(d.number == 0) {
-        var possibleNumbers = d.hint;
-        if (possibleNumbers.length == 0) {
-            // this should not happen
-            noPossibleNumber();
-        } else if (possibleNumbers.length == 1) {
-            updateStatus("The only possible number is " + possibleNumbers[0]);
-            updateDataNumber(d.row, d.column, possibleNumbers[0]);
-            updateDOM(true);
-            // solved a grid, terminate
-            return true;
-        } else {
-            var numbers = possibleNumbers[0];
-            for (var i = 1; i < possibleNumbers.length; i++) {
-                numbers = numbers + ", " + possibleNumbers[i];
-            }
-            updateStatus("Possible numbers are " + numbers);
-        }
+    var possibleNumbers = d.hint;
+    if (possibleNumbers.length == 0) {
+        // this should not happen
+        noPossibleNumber();
+    } else if (possibleNumbers.length == 1) {
+        // Rule 1 - Single-candidate squares
+        updateStatus("The only possible number is " + possibleNumbers[0]);
+        updateDataNumber(d.row, d.column, possibleNumbers[0]);
+        updateDOM(true);
+        // solved a grid, terminate
+        return true;
     } else {
-        updateStatus("The grid is already completed");
+        // Rule 2 - Single-square candidates
+        for (var i = possibleNumbers.length; i--; ) {
+            log("rule 2 possible numbers: " + possibleNumbers[i]);
+            var unique = isUniqueArea(d.row, d.column, possibleNumbers[i]);
+            if(unique) {
+                log("rule 2 success");
+                updateStatus("This is the only possible grid for " + possibleNumbers[i]);
+                updateDataNumber(d.row, d.column, possibleNumbers[i]);
+                updateDOM(true);
+                // solved a grid, terminate
+                return true;
+            }
+        }
+        
+        // Rule 2 failed, display possible numbers
+        var numbers = possibleNumbers[0];
+        for (var i = 1; i < possibleNumbers.length; i++) {
+            numbers = numbers + ", " + possibleNumbers[i];
+        }
+        updateStatus("Possible numbers are " + numbers);
     }
     highlightGrid(d, false);
     return false;
@@ -206,7 +237,11 @@ function gridClickHandler(d) {
             .classed("empty", true);
         setupGrid(d);
     } else {
-        solveGrid(d);
+        if(d.number == 0) {
+            solveGrid(d);
+        } else {
+            updateStatus("The grid is already completed");
+        }
         generateHints();
     }
 }
@@ -270,6 +305,7 @@ function removeNumber(numbers, n) {
         numbers.splice(index, 1);
     }
 }
+
 function getPossibleNumbers(row, col) {
     var allNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     
@@ -294,6 +330,52 @@ function getPossibleNumbers(row, col) {
         }
     }
     return allNumbers;
+}
+
+function isUniqueArea(row, col, number) {
+    var uniqueInRow = true,
+        uniqueInCol = true,
+        uniqueInBox = true;
+    var i, j, hint;
+    
+    // check row
+    for (i = 0; i < GRIDS_PER_DIMEN; i++) {
+        if(i === col) continue;
+        hint = dataArray[row][i].hint;
+        if(contains(hint, number)) {
+            log("failed row");
+            uniqueInRow = false;
+            break;
+        }
+    }
+    
+    // check column
+    for (i = 0; i < GRIDS_PER_DIMEN; i++) {
+        if(i === row) continue;
+        hint = dataArray[i][col].hint;
+        if(contains(hint, number)) {
+            log("failed col");
+            uniqueInCol = false;
+            break;
+        }
+    }
+    
+    // check box
+    var boxRow = Math.floor(row / BOXS_PER_DIMEN);
+    var boxCol = Math.floor(col / BOXS_PER_DIMEN);
+    for (i = boxRow * GRIDS_PER_BOX; i < (boxRow + 1) * GRIDS_PER_BOX; i++) {
+        for (j = boxCol * GRIDS_PER_BOX; j < (boxCol + 1) * GRIDS_PER_BOX; j++) {
+            if(i === row && j === col) continue;
+            hint = dataArray[i][j].hint;
+            if(contains(hint, number)) {
+                log("failed box");
+                uniqueInBox = false;
+                break;
+            }
+        }
+    }
+    
+    return uniqueInRow || uniqueInCol || uniqueInBox;
 }
 
 function updateStatus(text) {
@@ -456,12 +538,8 @@ function autoSolve() {
         return 0;
     }
     
-    // Solve by rules
-    // http://www.paulspages.co.uk/sudoku/howtosolve/
-    // Rule 1 - Single-candidate squares
     eachData(dataArray, solveGrid);
     
-    // Rule 2 - single-square candidates
     generateHints();
     var newCount = updateCount();
     var solved = count - newCount;
@@ -555,7 +633,7 @@ function isPuzzleValid() {
     return true;
 }
 
-formatData(dataString);
+formatData(dataStringHard);
 initDOM();
 generateHints();
 
