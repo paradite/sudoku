@@ -92,6 +92,19 @@ var dataStringHard =
         "050007004"
     ];
 
+var dataStringEvil =
+    [
+        "001006800",
+        "004700002",
+        "803100000",
+        "402090000",
+        "600000009",
+        "000030508",
+        "000005703",
+        "200003600",
+        "007400900"
+    ];
+
 var dataStringEmpty =
     [
         "000000000",
@@ -257,10 +270,7 @@ function gridClickHandler(d) {
     }
     if(isSetupMode) {
         // highlight this grid using empty effect
-        grids.select("rect")
-            .classed("empty", false);
-        d3.select(this)
-            .classed("empty", true);
+        highlightGrid(d, true);
         setupGrid(d);
     } else {
         if(d.number == 0) {
@@ -621,6 +631,8 @@ function exitSetUpMode() {
 }
 
 function clearBoard() {
+    grids.select("rect")
+            .classed("highlight", false);
     eachData(dataArray, clearGrid);
     generateHints();
     updateDOM(false);
