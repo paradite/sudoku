@@ -1,7 +1,10 @@
 /**
  * Created by paradite on 23/2/15.
  */
-var CLEAR_TEXT = "clear"
+var CLEAR_TEXT = "clear";
+var DIGIT_ID_PREFIX = "digit";
+var TEXT_SELECT_GRID = "Select a grid that has a number clue";
+var TEXT_SELECT_NUM = "Select a number clue from below";
  
 var BUTTON_HEIGHT = 55;
 var TITLE_HEIGHT = 65;
@@ -69,6 +72,7 @@ var grids;
 var statusTextElement;
 var statusCountElement;
 var setUpElement;
+var numberPadElement;
 
 function formatData(source) {
     // add row and column info into each grid for user interaction
@@ -191,22 +195,32 @@ function gridClickHandler(d) {
 }
 
 function setupGrid(d) {
-    updateStatus("Please select a number from below");
-    d3.select("#pad")
-        .selectAll("div")
-        .classed("clickable", true)
-        .on("click", function(){
-            d3.select("#pad")
-                .selectAll("div")
-                .classed("clickable", false);
-            if(this.id === CLEAR_TEXT) {
-                updateDataNumber(d.row, d.column, 0);
-            } else {
-                updateDataNumber(d.row, d.column, +this.id);
-            }
-            
-            updateDOM(false);
-        });
+    updateStatus(TEXT_SELECT_NUM);
+    var validNumbers = getPossibleNumbers(d.row, d.column);
+    // push the clear option
+    validNumbers.push(CLEAR_TEXT);
+    for (var i = validNumbers.length; i--; ) {
+        numberPadElement
+            .select("#" + DIGIT_ID_PREFIX + (validNumbers[i]))
+            .classed("clickable", true)
+            .on("click", function(){
+                var element = d3.select(this);
+                
+                if(element.html() === CLEAR_TEXT) {
+                    updateDataNumber(d.row, d.column, 0);
+                } else {
+                    updateDataNumber(d.row, d.column, +element.html());
+                }
+                
+                // reset state and unbind events for all buttons
+                numberPadElement
+                    .selectAll("div")
+                    .classed("clickable", false)
+                    .on("click", null);
+                updateStatus(TEXT_SELECT_GRID);
+                updateDOM(false);
+            });
+    }
 }
 
 function removeNumber(numbers, n) {
@@ -279,6 +293,7 @@ function initDOM() {
     statusTextElement = d3.select("#status-text");
     statusCountElement = d3.select("#status-count");
     setUpElement = d3.select("#new-puzzle");
+    numberPadElement = d3.select("#pad");
     
     // button handlers
     d3.select("#auto-solve")
@@ -295,7 +310,7 @@ function initDOM() {
         .data([1,2,3,4,5,6,7,8,9,CLEAR_TEXT])
         .enter()
         .append("div")
-        .attr("id", function(d) {return d;})
+        .attr("id", function(d) {return DIGIT_ID_PREFIX + d;})
         .text(function(d) {return d;})
         .classed("inline readable btn", true);
     
@@ -418,10 +433,11 @@ function newPuzzle() {
     if(isSetupMode) {
         exitSetUpMode();
     } else {
-        enterSetUpMode();
+        // show warning before entering
+        if (window.confirm("Current puzzle will be cleared, continue?")) { 
+            enterSetUpMode();
+        }
     }
-    
-    
 }
 
 function enterSetUpMode() {
@@ -429,7 +445,7 @@ function enterSetUpMode() {
     isSetupMode = true;
     clearBoard();
     toggleNumberPad(true);
-    updateStatus("Please select a grid to enter the initial clue");
+    updateStatus(TEXT_SELECT_GRID);
     setUpElement.text("Finish setting up");
 }
 
