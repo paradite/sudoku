@@ -4,8 +4,8 @@
 var CLEAR_TEXT = "clear";
 var DIGIT_ID_PREFIX = "digit";
 var TEXT_SELECT_GRID = "Select a grid that has a number clue";
-var TEXT_SELECT_NUM = "Select a number clue from below";
- 
+var TEXT_SELECT_NUM = "Type or Select a number from below";
+
 var BUTTON_HEIGHT = 55;
 var TITLE_HEIGHT = 65;
 var FOOTER_HEIGHT = 15;
@@ -226,6 +226,30 @@ function setupGrid(d) {
                 updateDOM(false);
             });
     }
+    d3.select("body").on("keypress",function(){
+        // http://unixpapa.com/js/key.html
+        var char;
+        if (d3.event.which == null) {
+            char= String.fromCharCode(d3.event.keyCode);    // old IE
+        } else if (d3.event.which != 0 && d3.event.charCode != 0)
+            char= String.fromCharCode(d3.event.which);	  // All others
+        else {
+            char = "";
+        }
+        log(char);
+        var number = +char;
+        if(number <= 9 && number >= 0) {
+            updateDataNumber(d.row, d.column, number);
+            // reset state and unbind events for all buttons
+            numberPadElement
+                .selectAll("div")
+                .classed("clickable", false)
+                .on("click", null);
+            updateStatus(TEXT_SELECT_GRID);
+            updateDOM(false);
+        }
+        
+    });
 }
 
 function removeNumber(numbers, n) {
