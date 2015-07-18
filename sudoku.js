@@ -123,9 +123,13 @@ function getHint(d) {
 }
 
 function errorSolving() {
-    statusCountElement.text("Error in the grid");
-    updateStatus("This sudoku is impossible to solve");
+    log("error in solving");
+    updateStatus("This sudoku is impossible to solve, try another one");
     locked = true;
+}
+
+function noPossibleNumber() {
+    updateStatus("No possible numbers");
 }
 
 function generateHints() {
@@ -144,11 +148,11 @@ function generateHints() {
 function generateHint(d) {
     if(d.number == 0) {
         var possibleNumbers = getPossibleNumbers(d.row, d.column);
+        log("possible numbers: " + possibleNumbers);
+        updateDataHints(d.row, d.column, possibleNumbers);
         if(possibleNumbers.length == 0) {
             // this should not happen
-            errorSolving();
-        } else {
-            updateDataHints(d.row, d.column, possibleNumbers);
+            updateDataHints(d.row, d.column, []);
         }
     } else {
         // already solved
@@ -161,7 +165,7 @@ function solveGrid(d) {
         var possibleNumbers = d.hint;
         if (possibleNumbers.length == 0) {
             // this should not happen
-            errorSolving();
+            noPossibleNumber();
         } else if (possibleNumbers.length == 1) {
             updateStatus("The only possible number is " + possibleNumbers[0]);
             updateDataNumber(d.row, d.column, possibleNumbers[0]);
@@ -177,6 +181,7 @@ function solveGrid(d) {
         updateStatus("The grid is already completed");
     }
 }
+
 function gridClickHandler(d) {
     if(locked) {
         return;
@@ -240,6 +245,7 @@ function getPossibleNumbers(row, col) {
         removeNumber(allNumbers, nCol);
         removeNumber(allNumbers, nRow);
     }
+    log("after row and col: " + allNumbers);
     var boxRow = Math.floor(row / BOXS_PER_DIMEN);
     var boxCol = Math.floor(col / BOXS_PER_DIMEN);
     for (i = boxRow * GRIDS_PER_BOX; i < (boxRow + 1) * GRIDS_PER_BOX; i++) {
@@ -248,6 +254,7 @@ function getPossibleNumbers(row, col) {
             removeNumber(allNumbers, nBox);
         }
     }
+    log("after box: " + allNumbers);
     return allNumbers;
 }
 
@@ -266,6 +273,7 @@ function updateCount() {
                 count++;
             } else {
                 // should not happen
+                log("updateCount error n is " + n);
                 errorSolving();
                 return;
             }
