@@ -66,7 +66,7 @@ var dataStringEmpty =
         "000000000"
     ];
 
-var data = [GRIDS_PER_DIMEN];
+var dataArray = [GRIDS_PER_DIMEN];
 
 var grids;
 var statusTextElement;
@@ -77,12 +77,12 @@ var numberPadElement;
 function formatData(source) {
     // add row and column info into each grid for user interaction
     for (var i = 0; i < source.length; i++) {
-        data[i] = [GRIDS_PER_DIMEN];
+        dataArray[i] = [GRIDS_PER_DIMEN];
         var row = source[i];
         var digitStrings = row.split("");
         for (var j = 0; j < row.length; j++) {
             var digit = parseInt(digitStrings[j]);
-            data[i][j] = {
+            dataArray[i][j] = {
                 number: digit,
                 row: i,
                 column: j,
@@ -136,9 +136,9 @@ function generateHints() {
     if(locked) {
         return;
     }
-    for (var i = 0; i < data.length; i++) {
-        for (var j = 0; j < data[i].length; j++) {
-            var d = data[i][j];
+    for (var i = 0; i < dataArray.length; i++) {
+        for (var j = 0; j < dataArray[i].length; j++) {
+            var d = dataArray[i][j];
             generateHint(d);
         }
     }
@@ -161,6 +161,7 @@ function generateHint(d) {
 }
 
 function solveGrid(d) {
+    highlightGrid(d, true);
     if(d.number == 0) {
         var possibleNumbers = d.hint;
         if (possibleNumbers.length == 0) {
@@ -170,6 +171,8 @@ function solveGrid(d) {
             updateStatus("The only possible number is " + possibleNumbers[0]);
             updateDataNumber(d.row, d.column, possibleNumbers[0]);
             updateDOM(true);
+            // solved a grid, terminate
+            return true;
         } else {
             var numbers = possibleNumbers[0];
             for (var i = 1; i < possibleNumbers.length; i++) {
@@ -180,6 +183,15 @@ function solveGrid(d) {
     } else {
         updateStatus("The grid is already completed");
     }
+    highlightGrid(d, false);
+    return false;
+}
+
+function highlightGrid(d, highlight) {
+    grids.select("rect")
+            .classed("highlight", false);
+    d3.select("#grid" + d.row + "" + d.column)
+        .classed("highlight", highlight);
 }
 
 function gridClickHandler(d) {
@@ -260,25 +272,27 @@ function removeNumber(numbers, n) {
 }
 function getPossibleNumbers(row, col) {
     var allNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    
+    // eliminate by row and column
     var i, j;
     for (i = 0; i < GRIDS_PER_DIMEN; i++) {
-        var nCol = data[i][col].number;
-        var nRow = data[row][i].number;
+        var nCol = dataArray[i][col].number;
+        var nRow = dataArray[row][i].number;
         // number not possible since it has already appeared
         // remove the number from possible numbers if present
         removeNumber(allNumbers, nCol);
         removeNumber(allNumbers, nRow);
     }
-    log("after row and col: " + allNumbers);
+    
+    // eliminate by box
     var boxRow = Math.floor(row / BOXS_PER_DIMEN);
     var boxCol = Math.floor(col / BOXS_PER_DIMEN);
     for (i = boxRow * GRIDS_PER_BOX; i < (boxRow + 1) * GRIDS_PER_BOX; i++) {
         for (j = boxCol * GRIDS_PER_BOX; j < (boxCol + 1) * GRIDS_PER_BOX; j++) {
-            var nBox = data[i][j].number;
+            var nBox = dataArray[i][j].number;
             removeNumber(allNumbers, nBox);
         }
     }
-    log("after box: " + allNumbers);
     return allNumbers;
 }
 
@@ -288,9 +302,9 @@ function updateStatus(text) {
 
 function updateCount() {
     var count = 0;
-    for (var i = 0; i < data.length; i++) {
-        for (var j = 0; j < data[i].length; j++) {
-            var n = data[i][j].number;
+    for (var i = 0; i < dataArray.length; i++) {
+        for (var j = 0; j < dataArray[i].length; j++) {
+            var n = dataArray[i][j].number;
             if(n >= 1 && n <= 9) {
                 // do nothing
             } else if(n == 0) {
@@ -312,11 +326,11 @@ function updateCount() {
 }
 
 function updateDataNumber(row, col, num) {
-    data[row][col].number = num;
+    dataArray[row][col].number = num;
 }
 
 function updateDataHints(row, col, hints) {
-    data[row][col].hint = hints;
+    dataArray[row][col].hint = hints;
 }
 
 function initDOM() {
@@ -357,7 +371,7 @@ function initDOM() {
 
 
     var rows = wrapper.selectAll("g")
-        .data(data)
+        .data(dataArray)
         .enter()
         .append("g")
         .classed("row" , true)
@@ -376,6 +390,7 @@ function initDOM() {
         .attr("transform", function(d, i){return "translate("+ (i * gridSize) + "," + 0 + ")";});
 
     gridsEnter.append("rect")
+        .attr("id", function(d) {return "grid" + d.row + "" + d.column;})
         .classed("grid" , true)
         .attr("height", gridSize)
         .attr("width", gridSize)
@@ -437,9 +452,16 @@ function updateDOM(showHint) {
 function autoSolve() {
     var count = updateCount();
     if(count === 0) {
+        updateStatus("All grids solved");
         return 0;
     }
-    eachData(solveGrid);
+    
+    // Solve by rules
+    // http://www.paulspages.co.uk/sudoku/howtosolve/
+    // Rule 1 - Single-candidate squares
+    eachData(dataArray, solveGrid);
+    
+    // Rule 2 - single-square candidates
     generateHints();
     var newCount = updateCount();
     var solved = count - newCount;
@@ -448,7 +470,7 @@ function autoSolve() {
     } if(solved === 0) {
         updateStatus("Cannot solve any grids, need to improve algorithm");
     } else {
-        updateStatus(solved + " grids solved");
+        // updateStatus(solved + " grids solved");
     }
     return solved;
 }
@@ -495,13 +517,15 @@ function exitSetUpMode() {
 }
 
 function clearBoard() {
-    eachData(clearGrid);
+    eachData(dataArray, clearGrid);
     generateHints();
     updateDOM(false);
 }
 
 function clearGrid(d) {
     updateDataNumber(d.row, d.column, 0);
+    // do not terminate
+    return false;
 }
 
 function toggleNumberPad(display) {
@@ -528,49 +552,7 @@ function toggleNumberPad(display) {
 }
 
 function isPuzzleValid() {
-    
     return true;
-}
-
-function getWidth() {
-  if (window.self.innerHeight) {
-    return window.self.innerWidth;
-  }
-
-  if (document.documentElement && document.documentElement.clientHeight) {
-    return document.documentElement.clientWidth;
-  }
-
-  if (document.body) {
-    return document.body.clientWidth;
-  }
-}
-
-function getHeight() {
-  if (window.self.innerHeight) {
-    return window.self.innerHeight;
-  }
-
-  if (document.documentElement && document.documentElement.clientHeight) {
-    return document.documentElement.clientHeight;
-  }
-
-  if (document.body) {
-    return document.body.clientHeight;
-  }
-}
-
-function eachData(f) {
-    for (var i = 0; i < data.length; i++) {
-        for (var j = 0; j < data[i].length; j++) {
-            var d = data[i][j];
-            f(d);
-        }
-    }
-}
-
-function log(text) {
-    console.log(text);
 }
 
 formatData(dataString);

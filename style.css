@@ -78,6 +78,9 @@ div.inline {
   stroke: #deb190;
   stroke-width: 2;
 }
+.grid.highlight {
+  fill: #a35660;
+}
 .grid.empty {
   fill: #906975;
 }
