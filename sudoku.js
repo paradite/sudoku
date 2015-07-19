@@ -11,16 +11,21 @@ var TITLE_HEIGHT = 65;
 var FOOTER_HEIGHT = 15;
 var BUTTON_ROWS = 2;
 
-var LANSCAPE = getHeight() < getWidth()?true:false;
+var MAX_HINT = 2;
 
-var sizeLimit = LANSCAPE?getHeight():getWidth();
+var SOLVE_DELAY = 200;
+
+var width = getWidth(),
+    height = getHeight();
 
 var BOARD_PADDING = 12;
 
-var boardSize = sizeLimit - BOARD_PADDING * 2 - TITLE_HEIGHT;
+// Fit to height for lanscape devices
+var boardSize = height - BUTTON_HEIGHT * BUTTON_ROWS - BOARD_PADDING * 2 - TITLE_HEIGHT - FOOTER_HEIGHT;
 
-if(LANSCAPE) {
-    boardSize = sizeLimit - BUTTON_HEIGHT * BUTTON_ROWS - TITLE_HEIGHT - FOOTER_HEIGHT - BOARD_PADDING * 2;
+// Fit to width for portrait devices
+if(boardSize > width) {
+    boardSize = width - BOARD_PADDING * 2;
 }
 
 var boardWidth = boardSize;
@@ -163,7 +168,7 @@ function getHint(d) {
         return "";
     } else if(d.hint.length == 1) {
         return d.hint[0];
-    } else if(d.hint.length < 2) {
+    } else if(d.hint.length <= MAX_HINT) {
         var numbers = "" + d.hint[0];
         for (var i = 1; i < d.hint.length; i++) {
             numbers = numbers + ", " + d.hint[i];
@@ -524,8 +529,8 @@ function initDOM() {
     gridsEnter.append("text")
         .classed("hint", true)
         .attr("dominant-baseline", "hanging")
-        .attr("x", gridSize/6)
-        .attr("y", gridSize/6)
+        .attr("x", gridSize/10)
+        .attr("y", gridSize/10)
         .attr("pointer-events", "none");
 
     // overlay 9-grid-box borders
@@ -550,7 +555,14 @@ function updateDOM(showHint) {
 
     if(showHint) {
         grids.select(".hint")
-            .text(getHint);
+            .text(getHint)
+            .style("font-size", function(d){
+                if(d.hint.length == 1) {
+                    return "13px";
+                } else {
+                    return "11px";
+                }
+            });
     } else {
         grids.select(".hint")
             .text("");
@@ -593,7 +605,7 @@ function autoSolveAll() {
     var solved = autoSolve();
     if(solved != 0) {
         // new state obtained, auto solve again
-        setTimeout(autoSolveAll, 300);
+        setTimeout(autoSolveAll, SOLVE_DELAY);
     }
 }
 

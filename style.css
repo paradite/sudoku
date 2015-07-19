@@ -6,6 +6,9 @@ body {
   margin: 0;
   background-color: #847577;
 }
+h1 {
+  font-size: 24px;
+}
 .readable {
   vertical-align: middle;
   height: 48px;
@@ -53,6 +56,7 @@ h3 {
 }
 div.inline {
   text-align: center;
+  vertical-align: middle;
   color: rgba(255, 250, 226, 0.95);
   display: table-cell;
 }
@@ -114,6 +118,6 @@ text.number {
   text-anchor: middle;
 }
 text.hint {
-  font-size: 12px;
+  font-size: 11px;
   text-anchor: start;
 }
