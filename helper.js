@@ -33,9 +33,29 @@ function eachData(data, f) {
             var d = data[i][j];
             if(f(d)) {
                 return;
-            };
+            }
         }
     }
+}
+
+function formatData(source) {
+    var result = [source.length];
+    // add row and column info into each grid for user interaction
+    for (var i = 0; i < source.length; i++) {
+        var row = source[i];
+        var digitStrings = row.split("");
+        result[i] = [digitStrings.length];
+        for (var j = 0; j < digitStrings.length; j++) {
+            var digit = parseInt(digitStrings[j]);
+            result[i][j] = {
+                number: digit,
+                row: i,
+                column: j,
+                hint: []
+            }
+        }
+    }
+    return result;
 }
 
 function log(text) {
@@ -45,4 +65,11 @@ function log(text) {
 function contains(array, element)
 {
     return array.indexOf(element) >= 0;
+}
+
+function removeNumber(numbers, n) {
+    var index = numbers.indexOf(n);
+    if (index > -1) {
+        numbers.splice(index, 1);
+    }
 }
