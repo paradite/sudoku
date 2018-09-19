@@ -4,6 +4,6 @@
 [http://paradite.github.io/sudoku/](http://paradite.github.io/sudoku/)
 
 
-###Todo List
+### Todo List
 - Validation after filling up each grid during setting up
 - Validation for keyword input
